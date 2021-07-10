@@ -46,7 +46,7 @@ extension GetRequest on EpitechAPI {
       if (enableLogs) {
         print(e.toString());
       }
-      return EpitechErrorType.EMPTY_CALL as Map<String, dynamic>;
+      return EpitechErrorType.EMPTY_CALL.asMap!;
     }
   }
 
@@ -63,20 +63,25 @@ extension GetRequest on EpitechAPI {
         print(e.toString());
         return {'error': ''};
       }
-      return EpitechErrorType.EMPTY_CALL as Map<String, dynamic>;
+      return EpitechErrorType.EMPTY_CALL.asMap!;
     }
   }
 
-  Future getRawDate({required DateTime? start, required DateTime? end}) async {
+  Future<Map<String, dynamic>> getRawDate(
+      {required DateTime? start, required DateTime? end}) async {
     try {
       final res = await client.get(
           '$cleanAutologin/planning/load?format=json/&start=${start.toString().split(" ")[0]}&end=${end.toString().split(" ")[0]}');
-      return jsonDecode(res.data);
+
+      if (enableLogs) {
+        print(res.data);
+      }
+      return jsonDecode(res.data) as Map<String, dynamic>;
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
-        return e.toString();
       }
+      return EpitechErrorType.EMPTY_CALL.asMap!;
     }
   }
 }
