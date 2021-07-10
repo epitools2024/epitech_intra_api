@@ -1,4 +1,4 @@
-enum endPoint {
+enum EndPoint {
   all,
   alert,
   message,
@@ -7,14 +7,14 @@ enum endPoint {
   nextRdv,
 }
 
-extension EndPointExt on endPoint {
+extension EndPointExt on EndPoint {
   static const ept = {
-    endPoint.all: '/?format=json',
-    endPoint.alert: '/notification/alert?format=json',
-    endPoint.message: '/notification/message?format=json',
-    endPoint.marks: '/marks?format=json',
-    endPoint.missed: '/notification/missed?format=json',
-    endPoint.nextRdv: '/notification/coming?format=json',
+    EndPoint.all: '/?format=json',
+    EndPoint.alert: '/notification/alert?format=json',
+    EndPoint.message: '/notification/message?format=json',
+    EndPoint.marks: '/marks?format=json',
+    EndPoint.missed: '/notification/missed?format=json',
+    EndPoint.nextRdv: '/notification/coming?format=json',
   };
 
   String? get value => ept[this];
