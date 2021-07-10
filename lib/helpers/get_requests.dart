@@ -10,6 +10,7 @@ final client = Dio(
   BaseOptions(
     baseUrl: BASE_URL,
     responseType: ResponseType.json,
+    validateStatus: (status) => true,
   ),
 );
 
@@ -37,51 +38,67 @@ extension AutologinChecker on EpitechAPI {
 extension GetRequest on EpitechAPI {
   Future<Map<String, dynamic>> get(EndPoint ept) async {
     try {
-      final res = await client.get('$cleanAutologin/user/$mail/${ept.value}');
+      final res = await client.get('$cleanAutologin/user/$mail${ept.value}');
       if (enableLogs) {
+        print('$cleanAutologin/user/$mail${ept.value}');
+        print(res.statusCode);
         print(res.data);
       }
-      return jsonDecode(res.data) as Map<String, dynamic>;
+
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return res.data;
+      }
+      return EpitechErrorType.EMPTY_CALL.asMap;
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
       }
-      return EpitechErrorType.EMPTY_CALL.asMap!;
+      return EpitechErrorType.EMPTY_CALL.asMap;
     }
   }
 
   Future<Map<String, dynamic>> getRaw(EndPoint ept,
       {String specifiers = ''}) async {
     try {
-      final res = await client.get('$cleanAutologin/${ept.value}');
+      final res = await client.get('$cleanAutologin${ept.value}');
+
       if (enableLogs) {
-        print(res.data);
+        print('$cleanAutologin${ept.value}');
+        print(res.statusCode);
       }
-      return jsonDecode(res.data) as Map<String, dynamic>;
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return res.data;
+      }
+      return EpitechErrorType.EMPTY_CALL.asMap;
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
-        return {'error': ''};
+        return EpitechErrorType.EMPTY_CALL.asMap;
       }
-      return EpitechErrorType.EMPTY_CALL.asMap!;
+      return EpitechErrorType.EMPTY_CALL.asMap;
     }
   }
 
-  Future<Map<String, dynamic>> getRawDate(
+  Future<List> getRawDate(
       {required DateTime? start, required DateTime? end}) async {
     try {
       final res = await client.get(
-          '$cleanAutologin/planning/load?format=json/&start=${start.toString().split(" ")[0]}&end=${end.toString().split(" ")[0]}');
+          '$cleanAutologin/planning/load?format=json&start=${start.toString().split(" ")[0].toString()}&end=${end.toString().split(" ")[0].toString()}');
 
       if (enableLogs) {
-        print(res.data);
+        print(
+            '$cleanAutologin/planning/load?format=json&start=${start.toString().split(" ")[0].toString()}&end=${end.toString().split(" ")[0].toString()}');
+        print(res.statusCode);
       }
-      return jsonDecode(res.data) as Map<String, dynamic>;
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return res.data;
+      }
+      return [EpitechErrorType.EMPTY_CALL];
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
       }
-      return EpitechErrorType.EMPTY_CALL.asMap!;
+      return [EpitechErrorType.EMPTY_CALL.asMap];
     }
   }
 }
