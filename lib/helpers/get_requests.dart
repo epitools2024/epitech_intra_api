@@ -35,7 +35,19 @@ extension AutologinChecker on EpitechAPI {
 }
 
 extension GetRequest on EpitechAPI {
-  Future get<T>(EndPoint ept) async {
+  Future get(EndPoint ept) async {
+    try {
+      final res = await client.get('$cleanAutologin/user/$mail/${ept.value}');
+      return jsonDecode(res.data);
+    } catch (e) {
+      if (enableLogs) {
+        print(e.toString());
+        return e.toString();
+      }
+    }
+  }
+
+  Future getRaw(EndPoint ept, {String specifiers = ''}) async {
     try {
       final res = await client.get('$cleanAutologin/${ept.value}');
       return jsonDecode(res.data);
@@ -43,6 +55,20 @@ extension GetRequest on EpitechAPI {
       if (enableLogs) {
         print(e.toString());
         return e.toString();
+      }
+    }
+
+    Future getRawDate(
+        {required DateTime? start, required DateTime? end}) async {
+      try {
+        final res = await client.get(
+            '$cleanAutologin/${ept.value}/&start=${start.toString().split(" ")[0]}&end=${end.toString().split(" ")[0]}');
+        return jsonDecode(res.data);
+      } catch (e) {
+        if (enableLogs) {
+          print(e.toString());
+          return e.toString();
+        }
       }
     }
   }

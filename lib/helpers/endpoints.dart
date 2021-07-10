@@ -3,8 +3,9 @@ enum EndPoint {
   alert,
   message,
   marks,
-  missed,
+  missedRdv,
   nextRdv,
+  flags,
 }
 
 extension EndPointExt on EndPoint {
@@ -12,9 +13,10 @@ extension EndPointExt on EndPoint {
     EndPoint.all: '/?format=json',
     EndPoint.alert: '/notification/alert?format=json',
     EndPoint.message: '/notification/message?format=json',
-    EndPoint.marks: '/marks?format=json',
-    EndPoint.missed: '/notification/missed?format=json',
+    EndPoint.marks: '/notes?format=json',
+    EndPoint.missedRdv: '/notification/missed?format=json',
     EndPoint.nextRdv: '/notification/coming?format=json',
+    EndPoint.flags: '/flags?format=json',
   };
 
   String? get value => ept[this];

@@ -1,8 +1,10 @@
 class EpitechAPI {
+  final String? mail;
   final String? autologin;
   final bool enableLogs;
   EpitechAPI({
-    this.autologin,
+    required this.mail,
+    required this.autologin,
     this.enableLogs = false,
   });
   //https://intra.epitech.eu/auth-57a0d4528e3117b98cffc0e2a0c996ac4f14808c
