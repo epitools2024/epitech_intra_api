@@ -35,40 +35,47 @@ extension AutologinChecker on EpitechAPI {
 }
 
 extension GetRequest on EpitechAPI {
-  Future get(EndPoint ept) async {
+  Future<Map<String, dynamic>> get(EndPoint ept) async {
     try {
       final res = await client.get('$cleanAutologin/user/$mail/${ept.value}');
-      return jsonDecode(res.data);
+      if (enableLogs) {
+        print(res.data);
+      }
+      return jsonDecode(res.data) as Map<String, dynamic>;
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
-        return e.toString();
       }
+      return EpitechErrorType.EMPTY_CALL as Map<String, dynamic>;
     }
   }
 
-  Future getRaw(EndPoint ept, {String specifiers = ''}) async {
+  Future<Map<String, dynamic>> getRaw(EndPoint ept,
+      {String specifiers = ''}) async {
     try {
       final res = await client.get('$cleanAutologin/${ept.value}');
+      if (enableLogs) {
+        print(res.data);
+      }
+      return jsonDecode(res.data) as Map<String, dynamic>;
+    } catch (e) {
+      if (enableLogs) {
+        print(e.toString());
+        return {'error': ''};
+      }
+      return EpitechErrorType.EMPTY_CALL as Map<String, dynamic>;
+    }
+  }
+
+  Future getRawDate({required DateTime? start, required DateTime? end}) async {
+    try {
+      final res = await client.get(
+          '$cleanAutologin/planning/load?format=json/&start=${start.toString().split(" ")[0]}&end=${end.toString().split(" ")[0]}');
       return jsonDecode(res.data);
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
         return e.toString();
-      }
-    }
-
-    Future getRawDate(
-        {required DateTime? start, required DateTime? end}) async {
-      try {
-        final res = await client.get(
-            '$cleanAutologin/${ept.value}/&start=${start.toString().split(" ")[0]}&end=${end.toString().split(" ")[0]}');
-        return jsonDecode(res.data);
-      } catch (e) {
-        if (enableLogs) {
-          print(e.toString());
-          return e.toString();
-        }
       }
     }
   }
