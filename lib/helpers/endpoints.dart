@@ -5,7 +5,12 @@ enum EndPoint {
   marks,
   missedRdv,
   nextRdv,
-  flags,
+  //flags,
+}
+
+enum DateEndPoint {
+  planning,
+  module_board,
 }
 
 extension EndPointExt on EndPoint {
@@ -16,8 +21,16 @@ extension EndPointExt on EndPoint {
     EndPoint.marks: '/notes?format=json',
     EndPoint.missedRdv: '/notification/missed?format=json',
     EndPoint.nextRdv: '/notification/coming?format=json',
-    EndPoint.flags: '/flags?format=json',
+    //EndPoint.flags: '/flags?format=json',
   };
 
+  String? get value => ept[this];
+}
+
+extension DateEndPointExt on DateEndPoint {
+  static const ept = {
+    DateEndPoint.planning: '/planning/load?format=json&',
+    DateEndPoint.module_board: '/module/board?format=json&'
+  };
   String? get value => ept[this];
 }

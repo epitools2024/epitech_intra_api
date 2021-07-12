@@ -6,7 +6,7 @@ enum EpitechErrorType {
 }
 
 extension EpitechErrorTypeValue on EpitechErrorType {
-  String? get asString {
+  String get asString {
     switch (this) {
       case EpitechErrorType.CONNECTION_TIMEOUT:
         return 'CONNECTION_TIMEOUT';
@@ -16,23 +16,6 @@ extension EpitechErrorTypeValue on EpitechErrorType {
         return 'BAD_REQUEST';
       case EpitechErrorType.EMPTY_CALL:
         return 'EMPTY_CALL';
-      default:
-        return null;
-    }
-  }
-
-  Map<String, dynamic>? get asMap {
-    switch (this) {
-      case EpitechErrorType.CONNECTION_TIMEOUT:
-        return {'CONNECTION_TIMEOUT': ''};
-      case EpitechErrorType.BAD_AUTOLOGIN:
-        return {'BAD_AUTOLOGIN': ''};
-      case EpitechErrorType.BAD_REQUEST:
-        return {'BAD_REQUEST': ''};
-      case EpitechErrorType.EMPTY_CALL:
-        return {'EMPTY_CALL': ''};
-      default:
-        return null;
     }
   }
 }

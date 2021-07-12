@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:epitech_intra_api/epitech_intra_api.dart';
 import 'package:epitech_intra_api/helpers/constants.dart';
@@ -10,78 +9,81 @@ final client = Dio(
   BaseOptions(
     baseUrl: BASE_URL,
     responseType: ResponseType.json,
+    validateStatus: (status) => true,
   ),
 );
 
-extension AutologinChecker on EpitechAPI {
-  Future<bool> isValidAutologin() async {
-    try {
-      final res = await client.get('$cleanAutologin');
-      if (res.statusCode == 200 || res.statusCode == 201) {
-        return true;
-      }
-      return false;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectTimeout ||
-          e.type == DioErrorType.receiveTimeout ||
-          e.type == DioErrorType.sendTimeout) {
-        throw EpitechError(
-            error: EpitechErrorType.CONNECTION_TIMEOUT,
-            message: 'Check your internet connection');
-      }
-      return false;
-    }
-  }
-}
-
 extension GetRequest on EpitechAPI {
-  Future<Map<String, dynamic>> get(EndPoint ept) async {
+  // T can be List or Map<String, dynamic>
+  Future<Either<EpitechErrorType, T>> get<T>(EndPoint ept) async {
     try {
-      final res = await client.get('$cleanAutologin/user/$mail/${ept.value}');
+      final res = await client.get('$cleanAutologin/user/$mail${ept.value}');
+
       if (enableLogs) {
+        print('$cleanAutologin/user/$mail${ept.value}');
+        print(res.statusCode);
         print(res.data);
       }
-      return jsonDecode(res.data) as Map<String, dynamic>;
+
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return Right(res.data as T);
+      }
+      return Left(EpitechErrorType.EMPTY_CALL);
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
       }
-      return EpitechErrorType.EMPTY_CALL.asMap!;
+      return Left(EpitechErrorType.EMPTY_CALL);
     }
   }
 
-  Future<Map<String, dynamic>> getRaw(EndPoint ept,
+  // T can be List or Map<String, dynamic>
+  Future<Either<EpitechErrorType, T>> getRaw<T>(EndPoint ept,
       {String specifiers = ''}) async {
     try {
-      final res = await client.get('$cleanAutologin/${ept.value}');
+      final res = await client.get('$cleanAutologin${ept.value}');
+
       if (enableLogs) {
-        print(res.data);
+        print('$cleanAutologin${ept.value}');
+        print(res.statusCode);
       }
-      return jsonDecode(res.data) as Map<String, dynamic>;
+
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return Right(res.data);
+      }
+      return Left(EpitechErrorType.EMPTY_CALL);
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
-        return {'error': ''};
       }
-      return EpitechErrorType.EMPTY_CALL.asMap!;
+      return Left(EpitechErrorType.EMPTY_CALL);
     }
   }
 
-  Future<Map<String, dynamic>> getRawDate(
-      {required DateTime? start, required DateTime? end}) async {
+  // T can be List or Map<String, dynamic>
+  Future<Either<EpitechErrorType, T>> getRawDate<T>(
+      {required DateTime? start,
+      required DateTime? end,
+      DateEndPoint ept = DateEndPoint.planning}) async {
     try {
       final res = await client.get(
-          '$cleanAutologin/planning/load?format=json/&start=${start.toString().split(" ")[0]}&end=${end.toString().split(" ")[0]}');
+          '$cleanAutologin${ept.value}start=${start.toString().split(" ")[0].toString()}&end=${end.toString().split(" ")[0].toString()}');
 
       if (enableLogs) {
-        print(res.data);
+        print(
+            '$cleanAutologin${ept.value}start=${start.toString().split(" ")[0].toString()}&end=${end.toString().split(" ")[0].toString()}');
+        print(res.statusCode);
       }
-      return jsonDecode(res.data) as Map<String, dynamic>;
+
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return Right(res.data);
+      }
+      return Left(EpitechErrorType.EMPTY_CALL);
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
       }
-      return EpitechErrorType.EMPTY_CALL.asMap!;
+      return Left(EpitechErrorType.EMPTY_CALL);
     }
   }
 }
