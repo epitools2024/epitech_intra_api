@@ -8,6 +8,11 @@ enum EndPoint {
   //flags,
 }
 
+enum DateEndPoint {
+  planning,
+  module_board,
+}
+
 extension EndPointExt on EndPoint {
   static const ept = {
     EndPoint.all: '/?format=json',
@@ -19,5 +24,13 @@ extension EndPointExt on EndPoint {
     //EndPoint.flags: '/flags?format=json',
   };
 
+  String? get value => ept[this];
+}
+
+extension DateEndPointExt on DateEndPoint {
+  static const ept = {
+    DateEndPoint.planning: '/planning/load?format=json&',
+    DateEndPoint.module_board: '/module/board?format=json&'
+  };
   String? get value => ept[this];
 }

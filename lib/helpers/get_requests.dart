@@ -14,8 +14,8 @@ final client = Dio(
 );
 
 extension GetRequest on EpitechAPI {
-  Future<Either<EpitechErrorType, Map<String, dynamic>>> get(
-      EndPoint ept) async {
+  // T can be List or Map<String, dynamic>
+  Future<Either<EpitechErrorType, T>> get<T>(EndPoint ept) async {
     try {
       final res = await client.get('$cleanAutologin/user/$mail${ept.value}');
 
@@ -26,7 +26,7 @@ extension GetRequest on EpitechAPI {
       }
 
       if (res.statusCode == 200 || res.statusCode == 201) {
-        return Right(res.data);
+        return Right(res.data as T);
       }
       return Left(EpitechErrorType.EMPTY_CALL);
     } catch (e) {
@@ -37,7 +37,8 @@ extension GetRequest on EpitechAPI {
     }
   }
 
-  Future<Either<EpitechErrorType, Map<String, dynamic>>> getRaw(EndPoint ept,
+  // T can be List or Map<String, dynamic>
+  Future<Either<EpitechErrorType, T>> getRaw<T>(EndPoint ept,
       {String specifiers = ''}) async {
     try {
       final res = await client.get('$cleanAutologin${ept.value}');
@@ -59,15 +60,18 @@ extension GetRequest on EpitechAPI {
     }
   }
 
-  Future<Either<EpitechErrorType, List>> getRawDate(
-      {required DateTime? start, required DateTime? end}) async {
+  // T can be List or Map<String, dynamic>
+  Future<Either<EpitechErrorType, T>> getRawDate<T>(
+      {required DateTime? start,
+      required DateTime? end,
+      DateEndPoint ept = DateEndPoint.planning}) async {
     try {
       final res = await client.get(
-          '$cleanAutologin/planning/load?format=json&start=${start.toString().split(" ")[0].toString()}&end=${end.toString().split(" ")[0].toString()}');
+          '$cleanAutologin${ept.value}start=${start.toString().split(" ")[0].toString()}&end=${end.toString().split(" ")[0].toString()}');
 
       if (enableLogs) {
         print(
-            '$cleanAutologin/planning/load?format=json&start=${start.toString().split(" ")[0].toString()}&end=${end.toString().split(" ")[0].toString()}');
+            '$cleanAutologin${ept.value}start=${start.toString().split(" ")[0].toString()}&end=${end.toString().split(" ")[0].toString()}');
         print(res.statusCode);
       }
 
