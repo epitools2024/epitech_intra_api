@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:epitech_intra_api/epitech_intra_api.dart';
 import 'package:epitech_intra_api/helpers/constants.dart';
@@ -13,7 +14,8 @@ final client = Dio(
 );
 
 extension GetRequest on EpitechAPI {
-  Future<Map<String, dynamic>> get(EndPoint ept) async {
+  Future<Either<EpitechErrorType, Map<String, dynamic>>> get(
+      EndPoint ept) async {
     try {
       final res = await client.get('$cleanAutologin/user/$mail${ept.value}');
       if (enableLogs) {
@@ -23,18 +25,18 @@ extension GetRequest on EpitechAPI {
       }
 
       if (res.statusCode == 200 || res.statusCode == 201) {
-        return res.data;
+        return Right(res.data);
       }
-      return EpitechErrorType.EMPTY_CALL.asMap;
+      return Left(EpitechErrorType.EMPTY_CALL);
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
       }
-      return EpitechErrorType.EMPTY_CALL.asMap;
+      return Left(EpitechErrorType.EMPTY_CALL);
     }
   }
 
-  Future<Map<String, dynamic>> getRaw(EndPoint ept,
+  Future<Either<EpitechErrorType, Map<String, dynamic>>> getRaw(EndPoint ept,
       {String specifiers = ''}) async {
     try {
       final res = await client.get('$cleanAutologin${ept.value}');
@@ -44,19 +46,18 @@ extension GetRequest on EpitechAPI {
         print(res.statusCode);
       }
       if (res.statusCode == 200 || res.statusCode == 201) {
-        return res.data;
+        return Right(res.data);
       }
-      return EpitechErrorType.EMPTY_CALL.asMap;
+      return Left(EpitechErrorType.EMPTY_CALL);
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
-        return EpitechErrorType.EMPTY_CALL.asMap;
       }
-      return EpitechErrorType.EMPTY_CALL.asMap;
+      return Left(EpitechErrorType.EMPTY_CALL);
     }
   }
 
-  Future<List> getRawDate(
+  Future<Either<EpitechErrorType, List>> getRawDate(
       {required DateTime? start, required DateTime? end}) async {
     try {
       final res = await client.get(
@@ -68,14 +69,14 @@ extension GetRequest on EpitechAPI {
         print(res.statusCode);
       }
       if (res.statusCode == 200 || res.statusCode == 201) {
-        return res.data;
+        return Right(res.data);
       }
-      return [EpitechErrorType.EMPTY_CALL];
+      return Left(EpitechErrorType.EMPTY_CALL);
     } catch (e) {
       if (enableLogs) {
         print(e.toString());
       }
-      return [EpitechErrorType.EMPTY_CALL.asMap];
+      return Left(EpitechErrorType.EMPTY_CALL);
     }
   }
 }

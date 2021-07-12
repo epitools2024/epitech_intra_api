@@ -16,55 +16,42 @@ void main() async {
     autologin: AUTOLOGIN_URL,
   );
 
-  group('Utilities', () {
-    test('Test on cleanAutologin', () {
-      expect(
-        intra.cleanAutologin,
-        AUTOLOGIN,
-      );
-      expect(
-        AUTOLOGIN,
-        AUTOLOGIN,
-      );
-    });
-  });
-
   group('Test on GetRequest extension on EpitechAPI', () {
     test('Test on all', () async {
       final res = intra.get(EndPoint.all);
-      expect(res, isNot(EpitechErrorType.EMPTY_CALL.asMap));
+      expect(res, isNot(EpitechErrorType.EMPTY_CALL));
     });
     test('Test on alert', () async {
       final res = await intra.get(EndPoint.alert);
-      expect(res, isNot(EpitechErrorType.EMPTY_CALL.asMap));
+      expect(res, isNot(EpitechErrorType.EMPTY_CALL));
     });
     test('Test on message', () {
       final res = intra.get(EndPoint.message);
-      expect(res, isNot(EpitechErrorType.EMPTY_CALL.asMap));
+      expect(res, isNot(EpitechErrorType.EMPTY_CALL));
     });
     test('Test on marks', () async {
       final res = intra.get(EndPoint.marks);
-      expect(res, isNot(EpitechErrorType.EMPTY_CALL.asMap));
+      expect(res, isNot(EpitechErrorType.EMPTY_CALL));
     });
 
     test('Test on missedRdv', () async {
       final res = await intra.get(EndPoint.missedRdv);
-      expect(res, isNot(EpitechErrorType.EMPTY_CALL.asMap));
+      expect(res, isNot(EpitechErrorType.EMPTY_CALL));
     });
 
     test('Test on nextRdv', () async {
       final res = await intra.get(EndPoint.nextRdv);
-      expect(res, isNot(EpitechErrorType.EMPTY_CALL.asMap));
+      expect(res, isNot(EpitechErrorType.EMPTY_CALL));
     });
 
     test('Test on raw queries', () async {
       final res = await intra.getRaw(EndPoint.all);
-      expect(res, isNot(EpitechErrorType.EMPTY_CALL.asMap));
+      expect(res, isNot(EpitechErrorType.EMPTY_CALL));
     });
     test('Test on Date queries', () async {
       final res = await intra.getRawDate(
           start: DateTime(2021, 01, 01), end: DateTime(2021, 01, 20));
-      expect(res, isNot(EpitechErrorType.EMPTY_CALL.asMap));
+      expect(res, isNot(EpitechErrorType.EMPTY_CALL));
     });
   });
 }
