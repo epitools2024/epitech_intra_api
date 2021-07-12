@@ -4,18 +4,27 @@ import 'package:epitech_intra_api/helpers/get_requests.dart';
 import 'package:epitech_intra_api/helpers/logger.dart';
 import 'package:test/test.dart';
 
+final EPITECH_MAIL = 'junior.medehou@epitech.eu';
+final AUTOLOGIN_URL =
+    'https://intra.epitech.eu/auth-57a0d4528e3117b98cffc0e2a0c996ac4f14808c/';
+final AUTOLOGIN = 'auth-57a0d4528e3117b98cffc0e2a0c996ac4f14808c';
+
 void main() async {
   final intra = EpitechAPI(
-      mail: 'junior.medehou@epitech.eu',
-      enableLogs: true,
-      autologin:
-          'https://intra.epitech.eu/auth-57a0d4528e3117b98cffc0e2a0c996ac4f14808c/');
+    mail: EPITECH_MAIL,
+    enableLogs: true,
+    autologin: AUTOLOGIN_URL,
+  );
 
   group('Utilities', () {
     test('Test on cleanAutologin', () {
       expect(
         intra.cleanAutologin,
-        'auth-57a0d4528e3117b98cffc0e2a0c996ac4f14808c',
+        AUTOLOGIN,
+      );
+      expect(
+        AUTOLOGIN,
+        AUTOLOGIN,
       );
     });
   });
