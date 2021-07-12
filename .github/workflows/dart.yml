@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Test manager
+name: CI/ Test Manager
 
 on:
   push:

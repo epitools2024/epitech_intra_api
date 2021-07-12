@@ -11,7 +11,7 @@ final AUTOLOGIN = 'auth-57a0d4528e3117b98cffc0e2a0c996ac4f14808c';
 void main() async {
   final intra = EpitechAPI(
     mail: EPITECH_MAIL,
-    //enableLogs: true,
+    enableLogs: true,
     autologin: AUTOLOGIN_URL,
   );
 

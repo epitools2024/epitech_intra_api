@@ -18,6 +18,7 @@ extension GetRequest on EpitechAPI {
       EndPoint ept) async {
     try {
       final res = await client.get('$cleanAutologin/user/$mail${ept.value}');
+
       if (enableLogs) {
         print('$cleanAutologin/user/$mail${ept.value}');
         print(res.statusCode);
@@ -45,6 +46,7 @@ extension GetRequest on EpitechAPI {
         print('$cleanAutologin${ept.value}');
         print(res.statusCode);
       }
+
       if (res.statusCode == 200 || res.statusCode == 201) {
         return Right(res.data);
       }
@@ -68,6 +70,7 @@ extension GetRequest on EpitechAPI {
             '$cleanAutologin/planning/load?format=json&start=${start.toString().split(" ")[0].toString()}&end=${end.toString().split(" ")[0].toString()}');
         print(res.statusCode);
       }
+
       if (res.statusCode == 200 || res.statusCode == 201) {
         return Right(res.data);
       }
