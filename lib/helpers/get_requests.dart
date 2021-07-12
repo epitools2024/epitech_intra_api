@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:epitech_intra_api/epitech_intra_api.dart';
 import 'package:epitech_intra_api/helpers/constants.dart';
@@ -13,27 +11,6 @@ final client = Dio(
     validateStatus: (status) => true,
   ),
 );
-
-extension AutologinChecker on EpitechAPI {
-  Future<bool> isValidAutologin() async {
-    try {
-      final res = await client.get('$cleanAutologin');
-      if (res.statusCode == 200 || res.statusCode == 201) {
-        return true;
-      }
-      return false;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectTimeout ||
-          e.type == DioErrorType.receiveTimeout ||
-          e.type == DioErrorType.sendTimeout) {
-        throw EpitechError(
-            error: EpitechErrorType.CONNECTION_TIMEOUT,
-            message: 'Check your internet connection');
-      }
-      return false;
-    }
-  }
-}
 
 extension GetRequest on EpitechAPI {
   Future<Map<String, dynamic>> get(EndPoint ept) async {

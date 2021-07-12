@@ -4,6 +4,8 @@
 library epitech_intra_api;
 
 export 'src/epitech_intra_api.dart';
-export 'helpers/constants.dart';
-export '';
+export 'helpers/utils.dart';
+export 'helpers/enums.dart';
+export 'helpers/enums.dart';
+
 // TODO: Export any libraries intended for clients of this package.
